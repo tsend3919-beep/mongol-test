@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MONGOL TEST</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    background:#08080d;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+header{
+    padding:22px;
+    text-align:center;
+    border-bottom:1px solid #252530;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:900;
+}
+
+.logo span{
+    color:#9b5cff;
+}
+
+.container{
+    width:92%;
+    max-width:650px;
+    margin:25px auto;
+}
+
+.hero{
+    text-align:center;
+    padding:25px 5px;
+}
+
+.hero h1{
+    font-size:29px;
+    margin-bottom:12px;
+}
+
+.hero p{
+    color:#999;
+    line-height:1.6;
+}
+
+.tests{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.card{
+    background:#15151f;
+    border:1px solid #292936;
+    border-radius:20px;
+    padding:20px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.card:active{
+    transform:scale(.97);
+}
+
+.icon{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.card h3{
+    margin-bottom:7px;
+}
+
+.card p{
+    color:#999;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.premium{
+    margin-top:18px;
+    border-color:#8b5cf6;
+}
+
+.price{
+    font-size:28px;
+    font-weight:bold;
+    margin:15px 0;
+}
+
+button{
+    width:100%;
+    padding:16px;
+    border:0;
+    border-radius:14px;
+    margin-top:12px;
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.quiz,
+.result{
+    display:none;
+}
+
+.progress{
+    height:7px;
+    background:#22222c;
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:25px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#8b5cf6,#ec4899);
+}
+
+.count{
+    color:#888;
+    margin-bottom:12px;
+}
+
+.question{
+    font-size:21px;
+    line-height:1.5;
+    margin-bottom:20px;
+}
+
+.answers{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.answer{
+    background:#171721;
+    border:1px solid #30303d;
+    text-align:left;
+    font-weight:normal;
+}
+
+.answer.selected{
+    background:#8b5cf6;
+}
+
+.result{
+    text-align:center;
+}
+
+.result-card{
+    background:linear-gradient(145deg,#171124,#101015);
+    border:1px solid #8b5cf6;
+    border-radius:25px;
+    padding:30px 20px;
+    margin-bottom:18px;
+}
+
+.result-icon{
+    font-size:65px;
+}
+
+.result-card h1{
+    margin:12px 0;
+    font-size:25px;
+}
+
+.score{
+    font-size:58px;
+    font-weight:900;
+    color:#a78bfa;
+    margin:15px 0;
+}
+
+.result-card p{
+    color:#aaa;
+    line-height:1.7;
+}
+
+.share{
+    background:white;
+    color:#111;
+}
+
+.challenge{
+    background:linear-gradient(135deg,#ec4899,#8b5cf6);
+}
+
+.back{
+    text-align:center;
+    color:#777;
+    margin-top:20px;
+}
+
+footer{
+    text-align:center;
+    color:#555;
+    padding:30px;
+    font-size:12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        MONGOL <span>TEST</span>
+    </div>
+</header>
+
+<div class="container">
+
+<!-- HOME -->
+
+<section id="home">
+
+<div class="hero">
+
+<h1>Өөрийгөө шалга 🔥</h1>
+
+<p>
+Чи өөрийгөө хэр сайн мэдэх вэ?
+Тестээ сонгоод найзуудаа сорь.
+</p>
+
+</div>
+
+<div class="tests">
+
+<div class="card" onclick="startTest('love')">
+<div class="icon">❤️</div>
+<h3>Хайрын тест</h3>
+<p>Чи хайр дурлалд ямар хүн бэ?</p>
+</div>
+
+<div class="card" onclick="startTest('iq')">
+<div class="icon">🧠</div>
+<h3>IQ тест</h3>
+<p>Логик сэтгэлгээгээ шалга.</p>
+</div>
+
+<div class="card" onclick="startTest('mongol')">
+<div class="icon">🇲🇳</div>
+<h3>Монгол зан</h3>
+<p>Чиний Монгол зан хэдэн % вэ?</p>
+</div>
+
+<div class="card" onclick="startTest('dark')">
+<div class="icon">😈</div>
+<h3>Dark Side</h3>
+<p>Чиний далд зан чанар.</p>
+</div>
+
+</div>
+
+<div class="card premium">
+
+<h3>👑 Premium Test</h3>
+
+<p>
+20+ асуулт<br>
+Дэлгэрэнгүй personality analysis<br>
+Онцгой үр дүн
+</p>
+
+<div class="price">
+2,000₮
+</div>
+
+<button onclick="premium()">
+QPay-ээр Premium авах
+</button>
+
+</div>
+
+</section>
+
+
+<!-- QUIZ -->
+
+<section class="quiz" id="quiz">
+
+<div class="progress">
+<div class="progress-bar" id="progress"></div>
+</div>
+
+<div class="count" id="count"></div>
+
+<div class="question" id="question"></div>
+
+<div class="answers" id="answers"></div>
+
+<button onclick="nextQuestion()">
+Дараагийн асуулт →
+</button>
+
+<div class="back" onclick="home()">
+← Буцах
+</div>
+
+</section>
+
+
+<!-- RESULT -->
+
+<section class="result" id="result">
+
+<div class="result-card" id="resultCard">
+
+<div class="result-icon" id="resultIcon">
+🔥
+</div>
+
+<h1 id="resultTitle">
+Таны үр дүн
+</h1>
+
+<div class="score" id="score">
+0%
+</div>
+
+<p id="resultText"></p>
+
+<br>
+
+<small>
+MONGOL TEST 🇲🇳
+</small>
+
+</div>
+
+<button class="share" onclick="shareResult()">
+📤 Үр дүнгээ хуваалцах
+</button>
+
+<button class="challenge" onclick="challengeFriend()">
+👥 Найзаа сорих 🔥
+</button>
+
+<button onclick="restart()">
+🔄 Дахин тест хийх
+</button>
+
+<div class="back" onclick="home()">
+← Нүүр хуудас
+</div>
+
+</section>
+
+</div>
+
+<footer>
+© 2026 MONGOL TEST
+</footer>
+
+
+<script>
+
+let type="";
+let index=0;
+let score=0;
+let selected=false;
+
+const questions={
+
+love:[
+"Чамд таалагддаг хүн мессеж бичихгүй бол?",
+"Хайртай хүн чинь гомдоовол?",
+"Болзоонд аль нь хамгийн гоё вэ?",
+"Чи хайртай хүнээ хэр их боддог вэ?",
+"Хайрынхаа төлөө хэр их зүйл хийж чадах вэ?",
+"Хайртай хүн чинь өөр хүнтэй яривал?",
+"Хосуудын хамгийн чухал зүйл юу вэ?",
+"Чи атаархдаг уу?",
+"Хайртай хүнээсээ юу хамгийн их хүсдэг вэ?",
+"Чи анхны алхмыг хийж чаддаг уу?"
+],
+
+iq:[
+"2 + 2 × 3 = ?",
+"2, 4, 8, 16, ?",
+"1, 1, 2, 3, 5, 8, ?",
+"10 - 2 × 3 = ?",
+"3 × 3 + 1 = ?",
+"5, 10, 20, 40, ?",
+"100 ÷ 10 = ?",
+"7 + 8 = ?",
+"12 - 5 = ?",
+"4 × 5 = ?"
+],
+
+mongol:[
+"Найз чинь '5 минутын дараа очно' гэвэл?",
+"Цай уух уу гэж асуувал?",
+"Наадам эхлэхэд хамгийн түрүүнд?",
+"Зочин ирвэл?",
+"Хуушуур хараад?",
+"Цагаан сар болоход?",
+"Найз чинь 'хоол идсэн үү?' гэвэл?",
+"Монголын хамгийн гоё зүйл?",
+"Хөдөө явахад?",
+"Наадам дээр?"
+],
+
+dark:[
+"Хэн нэгэн чамайг гомдоовол?",
+"Чи нууц хадгалж чаддаг уу?",
+"Хэн нэгэн чамд худал хэлбэл?",
+"Маргаанд чи?",
+"Чиний хамгийн хүчтэй тал?",
+"Чамайг хуурсан хүнийг?",
+"Чи өшөө авдаг уу?",
+"Хүмүүс чамайг хэр сайн мэддэг вэ?",
+"Чи сэтгэлээ амархан харуулдаг уу?",
+"Чиний хамгийн далд зан?"
+]
+
+};
+
+
+const choices=[
+["Тийм","Заримдаа","Үгүй","Хамаарахгүй"],
+["Шууд ярилцана","Дуугүй болно","Уурлана","Өөрөө эвлэрнэ"],
+["Романтик орой","Кино","Адал явдал","Гэртээ байх"],
+["Байнга","Заримдаа","Ховор","Бараг үгүй"]
+];
+
+
+function startTest(t){
+
+type=t;
+index=0;
+score=0;
+
+document.getElementById("home").style.display="none";
+document.getElementById("result").style.display="none";
+document.getElementById("quiz").style.display="block";
+
+show();
+
+}
+
+
+function show(){
+
+let q=questions[type];
+
+document.getElementById("count").innerText=
+(index+1)+" / "+q.length;
+
+document.getElementById("question").innerText=
+q[index];
+
+let box=document.getElementById("answers");
+
+box.innerHTML="";
+
+let arr=choices[index%choices.length];
+
+arr.forEach((x,i)=>{
+
+let b=document.createElement("button");
+
+b.className="answer";
+b.innerText=x;
+
+b.onclick=function(){
+
+if(selected)return;
+
+selected=true;
+
+document.querySelectorAll(".answer")
+.forEach(a=>a.classList.remove("selected"));
+
+b.classList.add("selected");
+
+if(type==="iq"){
+
+let correct=[1,2,2,1,0,2,0,0,1,1];
+
+if(i===correct[index]){
+score+=10;
+}
+
+}else{
+
+score+=10;
+
+}
+
+};
+
+box.appendChild(b);
+
+});
+
+document.getElementById("progress").style.width=
+(index/q.length*100)+"%";
+
+selected=false;
+
+}
+
+
+function nextQuestion(){
+
+if(!selected){
+
+alert("Хариултаа сонгоно уу 😄");
+
+return;
+
+}
+
+index++;
+
+if(index>=questions[type].length){
+
+result();
+
+return;
+
+}
+
+show();
+
+}
+
+
+function result(){
+
+document.getElementById("quiz").style.display="none";
+document.getElementById("result").style.display="block";
+
+document.getElementById("score").innerText=
+score+"%";
+
+let icon="🔥";
+let title="";
+let text="";
+
+
+if(type==="love"){
+
+icon="❤️";
+
+if(score>=80){
+
+title="Чи маш романтик хүн!";
+
+text="Чи хайртай хүнээ халамжилж, харилцаандаа итгэлцлийг чухалчилдаг.";
+
+}else if(score>=50){
+
+title="Чи болгоомжтой хайрладаг!";
+
+text="Чи сэтгэлээ шууд гаргадаггүй ч хайртай хүнээ үнэлдэг.";
+
+}else{
+
+title="Чи эрх чөлөөтэй хайрладаг!";
+
+text="Чамд хайр дурлалын хажуугаар өөрийн орон зай чухал.";
+
+}
+
+}
+
+
+else if(type==="iq"){
+
+icon="🧠";
+
+if(score>=80){
+
+title="IQ KING! 👑";
+
+text="Чиний логик сэтгэлгээ маш сайн байна.";
+
+}else if(score>=50){
+
+title="Сайн байна! 😎";
+
+text="Чиний логик сэтгэлгээ дундаас дээш байна.";
+
+}else{
+
+title="Дахиад нэг үз! 😂";
+
+text="Дараагийн удаа илүү өндөр оноо авах боломжтой.";
+
+}
+
+}
+
+
+else if(type==="mongol"){
+
+icon="🇲🇳";
+
+title="Монгол зан: "+score+"%";
+
+text="Чиний хариултаас Монгол ахуй, зан чанар нэлээд хүчтэй харагдаж байна.";
+
+}
+
+
+else{
+
+icon="😈";
+
+if(score>=80){
+
+title="Dark Side: HIGH 😈";
+
+text="Чи нууцлаг, шийдэмгий талтай хүн байна.";
+
+}else if(score>=50){
+
+title="Dark Side: MEDIUM 😏";
+
+text="Чамд зөөлөн болон хатуу тал хоёулаа байна.";
+
+}else{
+
+title="Dark Side: LOW 😇";
+
+text="Чи асуудлыг тайван шийдэхийг илүүд үздэг.";
+
+}
+
+}
+
+
+document.getElementById("resultIcon").innerText=icon;
+document.getElementById("resultTitle").innerText=title;
+document.getElementById("resultText").innerText=text;
+
+}
+
+
+function shareResult(){
+
+let text=
+"🔥 MONGOL TEST\n\n"+
+"Миний үр дүн: "+score+"%\n"+
+document.getElementById("resultTitle").innerText+
+"\n\nЧи надаас илүү авч чадах уу? 😎";
+
+if(navigator.share){
+
+navigator.share({
+
+title:"MONGOL TEST",
+text:text,
+url:window.location.href
+
+});
+
+}else{
+
+navigator.clipboard.writeText(
+text+"\n"+window.location.href
+);
+
+alert("Үр дүн хууллаа 📋");
+
+}
+
+}
+
+
+function challengeFriend(){
+
+let link=
+window.location.href.split("?")[0]+
+"?challenge="+score+
+"&type="+type;
+
+let text=
+"🔥 НАЙЗЫН CHALLENGE 🔥\n\n"+
+"Би MONGOL TEST дээр "+
+score+"% авлаа!\n\n"+
+"Чи надаас илүү авч чадах уу? 😎\n\n"+
+link;
+
+if(navigator.share){
+
+navigator.share({
+
+title:"MONGOL TEST Challenge",
+text:text,
+url:link
+
+});
+
+}else{
+
+navigator.clipboard.writeText(text);
+
+alert(
+"Challenge link хууллаа! 🔥\n\n"+
+"Найздаа явуулаарай."
+);
+
+}
+
+}
+
+
+function restart(){
+
+startTest(type);
+
+}
+
+
+function home(){
+
+document.getElementById("home").style.display="block";
+document.getElementById("quiz").style.display="none";
+document.getElementById("result").style.display="none";
+
+}
+
+
+function premium(){
+
+alert(
+"👑 PREMIUM TEST\n\n"+
+"Үнэ: 2,000₮\n\n"+
+"QPay төлбөрийн системийг дараагийн шатанд холбоно."
+);
+
+}
+
+</script>
+
+</body>
+</html>
