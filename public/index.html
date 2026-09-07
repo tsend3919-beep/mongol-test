@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+⁸<!DOCTYPE html>
 <html lang="mn">
 <head>
 <meta charset="UTF-8">
@@ -743,37 +743,226 @@ document.getElementById("result").style.display="none";
 
 async function premium(){
 
-  try {
+  // QPay төлбөр үүсгэх
+  try{
 
-    const response = await fetch("/api/create-payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
+    const response = await fetch("/api/create-payment",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
       }
     });
 
     const data = await response.json();
 
-    if (!data.success) {
-      alert("❌ QPay төлбөр үүссэнгүй.");
+    if(!data.success){
+      alert("❌ QPay төлбөр үүсгэхэд алдаа гарлаа.");
       console.log(data);
       return;
     }
 
-    alert(
-      "👑 PREMIUM TEST\n\n" +
-      "Үнэ: 2,000₮\n\n" +
-      "QPay төлбөр амжилттай үүслээ!\n\n" +
-      "Invoice ID: " + data.invoice_id
-    );
+    // Payment цонх
+    const box = document.createElement("div");
 
-    console.log("QPAY:", data);
+    box.id = "qpayBox";
 
-  } catch (error) {
+    box.style.position = "fixed";
+    box.style.left = "50%";
+    box.style.top = "50%";
+    box.style.transform = "translate(-50%,-50%)";
+    box.style.width = "90%";
+    box.style.maxWidth = "400px";
+    box.style.background = "#151820";
+    box.style.color = "white";
+    box.style.padding = "25px";
+    box.style.borderRadius = "20px";
+    box.style.textAlign = "center";
+    box.style.zIndex = "9999";
+    box.style.boxShadow = "0 0 40px rgba(0,0,0,.7)";
+
+    let qr = "";
+
+    if(data.qr_image){
+
+      qr = `
+        <img
+          src="data:image/png;base64,${data.qr_image}"
+          style="
+            width:250px;
+            height:250px;
+            background:white;
+            padding:10px;
+            border-radius:15px;
+          "
+        >
+      `;
+
+    }else{
+
+      qr = `
+        <p style="font-size:14px">
+          QPay QR мэдээлэл ирсэнгүй.
+        </p>
+      `;
+
+    }
+
+    let links = "";
+
+    if(data.urls && data.urls.length){
+
+      links = `
+        <div style="margin-top:15px">
+
+          ${data.urls.map(item => `
+            <a
+              href="${item.link}"
+              style="
+                display:block;
+                background:#9b5cff;
+                color:white;
+                text-decoration:none;
+                padding:12px;
+                margin:8px 0;
+                border-radius:10px;
+                font-weight:bold;
+              "
+            >
+              ${item.name || "Банкны апп-аар төлөх"}
+            </a>
+          `).join("")}
+
+        </div>
+      `;
+
+    }
+
+    box.innerHTML = `
+
+      <div style="font-size:25px;font-weight:bold">
+        👑 PREMIUM TEST
+      </div>
+
+      <p style="font-size:18px">
+        Төлбөр: <b>2,000₮</b>
+      </p>
+
+      <p>
+        QPay QR кодыг уншуулж төлбөрөө төлнө үү.
+      </p>
+
+      ${qr}
+
+      ${links}
+
+      <p id="qpayStatus"
+         style="
+           margin-top:18px;
+           font-weight:bold;
+         ">
+        ⏳ Төлбөр хүлээж байна...
+      </p>
+
+      <button
+        onclick="document.getElementById('qpayBox').remove()"
+        style="
+          margin-top:10px;
+          width:100%;
+          padding:12px;
+          border:0;
+          border-radius:10px;
+          background:#252a35;
+          color:white;
+          font-size:16px;
+        "
+      >
+        ✕ Хаах
+      </button>
+
+    `;
+
+    document.body.appendChild(box);
+
+    // Төлбөр шалгах
+    const invoiceId = data.invoice_id;
+
+    let checkCount = 0;
+
+    const paymentChecker = setInterval(async()=>{
+
+      checkCount++;
+
+      try{
+
+        const check = await fetch(
+          "/api/check-payment/" + invoiceId
+        );
+
+        const result = await check.json();
+
+        console.log("QPAY PAYMENT:",result);
+
+        const payments = result.rows || result.payment_info || [];
+
+        const paid = payments.some(payment =>
+          payment.payment_status === "PAID" ||
+          payment.payment_status === "SUCCESS" ||
+          payment.payment_status === "COMPLETED"
+        );
+
+        if(paid){
+
+          clearInterval(paymentChecker);
+
+          document.getElementById("qpayStatus").innerHTML =
+            "✅ Төлбөр амжилттай!";
+
+          setTimeout(()=>{
+
+            document.getElementById("qpayBox").remove();
+
+            alert(
+              "🎉 Баяр хүргэе!\n\n"+
+              "Premium Test нээгдлээ."
+            );
+
+            // Premium тестийг эхлүүлэх
+            startTest("premium");
+
+          },1000);
+
+        }
+
+        // 5 минут шалгаад зогсоно
+        if(checkCount >= 60){
+
+          clearInterval(paymentChecker);
+
+          const status =
+            document.getElementById("qpayStatus");
+
+          if(status){
+            status.innerHTML =
+              "⌛ Төлбөр шалгах хугацаа дууслаа.";
+          }
+
+        }
+
+      }catch(error){
+
+        console.log("Payment check error:",error);
+
+      }
+
+    },5000);
+
+  }catch(error){
 
     console.error(error);
 
-    alert("❌ QPay сервертэй холбогдож чадсангүй.");
+    alert(
+      "❌ Сервертэй холбогдоход алдаа гарлаа."
+    );
 
   }
 
