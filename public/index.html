@@ -741,17 +741,40 @@ document.getElementById("result").style.display="none";
 }
 
 
-function premium(){
+async function premium(){
 
-alert(
-"👑 PREMIUM TEST\n\n"+
-"Үнэ: 2,000₮\n\n"+
-"QPay төлбөрийн системийг дараагийн шатанд холбоно."
-);
+  try {
+
+    const response = await fetch("/api/create-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      alert("❌ QPay төлбөр үүссэнгүй.");
+      console.log(data);
+      return;
+    }
+
+    alert(
+      "👑 PREMIUM TEST\n\n" +
+      "Үнэ: 2,000₮\n\n" +
+      "QPay төлбөр амжилттай үүслээ!\n\n" +
+      "Invoice ID: " + data.invoice_id
+    );
+
+    console.log("QPAY:", data);
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("❌ QPay сервертэй холбогдож чадсангүй.");
+
+  }
 
 }
-
-</script>
-
-</body>
-</html>
